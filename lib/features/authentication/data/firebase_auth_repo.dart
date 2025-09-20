@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:insta_clone/features/authentication/domain/entities/app_auth.dart';
 import 'package:insta_clone/features/authentication/domain/repositories/auth_repo.dart';
 
 class FirebaseAuthRepo implements AuthRepo {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
   @override
   Future<AppUser?> getCurrentUser() async {
@@ -63,6 +65,12 @@ class FirebaseAuthRepo implements AuthRepo {
         email: email,
         name: name,
       );
+
+      // save user data in firestore
+      await firebaseFirestore
+          .collection("users")
+          .doc(user.uid)
+          .set(user.toJson());
 
       return user;
     } catch (e) {

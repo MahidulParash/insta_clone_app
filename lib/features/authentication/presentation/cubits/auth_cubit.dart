@@ -74,4 +74,10 @@ class AuthCubit extends Cubit<AuthStates> {
     authRepo.signOut();
     emit(Unauthenticated());
   }
+
+  // toggle
+
+  Future<void> toggle(bool isSignInPage) async {
+    emit(TogglePage(isSignInPage));
+  }
 }
