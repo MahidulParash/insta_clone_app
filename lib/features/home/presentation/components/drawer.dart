@@ -38,11 +38,14 @@ class CustomDrawer extends StatelessWidget {
               icon: Icons.person_4,
               onTap: () {
                 Navigator.of(context).pop();
+                // get current udi
+                final user = context.read<AuthCubit>().currentUser;
+                String? uid = user!.uid;
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return ProfilePage();
+                      return ProfilePage(uid: uid);
                     },
                   ),
                 );

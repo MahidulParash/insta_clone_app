@@ -8,6 +8,8 @@ import 'package:insta_clone/features/authentication/presentation/cubits/auth_sta
 import 'package:insta_clone/features/authentication/presentation/pages/auth_page.dart';
 import 'package:insta_clone/features/home/presentation/pages/home_page.dart';
 import 'package:insta_clone/config/themes/light_mode.dart';
+import 'package:insta_clone/features/profile/data/firebase_profile_repo.dart';
+import 'package:insta_clone/features/profile/presentation/cubits/profile_cubit.dart';
 
 /*    init repos for db
        - firebase
@@ -22,13 +24,22 @@ import 'package:insta_clone/config/themes/light_mode.dart';
        - authenticated -> home page
 */
 class MyApp extends StatelessWidget {
-  final authRepo = FirebaseAuthRepo();
+  final fbAuthRepo = FirebaseAuthRepo();
+  final fbProfileRepo = FirebaseProfileRepo();
   MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AuthCubit(authRepo: authRepo)..checkAuth(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => AuthCubit(authRepo: fbAuthRepo)..checkAuth(),
+        ),
+        BlocProvider(
+          create: (context) => ProfileCubit(profileRepo: fbProfileRepo),
+        ),
+      ],
+
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: lightMode,
